@@ -12,17 +12,24 @@ spring:
     # 2 确认消息正确路由到了 队列。如果没有正确路由到队列 ，则触发回调
     publisher-returns: true
 
-
     #开启消息手动确认
     listener:
       simple:
+      # acknowledge-mode ：auto 当队列监听者发生异常时，消息会进入死信队列
         acknowledge-mode: manual
+        # 消费者重试机制开启
+        retry:
+          enabled: true
+          max-attempts: 3 # 最大重试次数，就是消息投递给消费者的重试次数，重试次数不宜过大，否则容易导致消息堆积
+          # 经测试，消息并没有进入死信
+        default-requeue-rejected: false # 达到最大重试次数后，消息是否重如队列，false 表示不重新如队列，成为死信，若配置死信队列，进入死信队列
     template:
       retry:
-        enabled: true
+        enabled: true # 消息生产者重试开启
         max-attempts: 3
         initial-interval: 1000
         max-interval: 10000
         multiplier: 1.0
+        # publisher-returns: true 配合 ，可以使没有正确路由到队列的消息 返回给消费者
       mandatory: true
 
