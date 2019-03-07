@@ -6,3 +6,23 @@ spring:
     username: guest
     password: guest
     virtual-host: /
+
+    #rabbit 消息确认机制，1 确认消息投递到了 exchange，异步 confirms
+    publisher-confirms: true
+    # 2 确认消息正确路由到了 队列。如果没有正确路由到队列 ，则触发回调
+    publisher-returns: true
+
+
+    #开启消息手动确认
+    listener:
+      simple:
+        acknowledge-mode: manual
+    template:
+      retry:
+        enabled: true
+        max-attempts: 3
+        initial-interval: 1000
+        max-interval: 10000
+        multiplier: 1.0
+      mandatory: true
+

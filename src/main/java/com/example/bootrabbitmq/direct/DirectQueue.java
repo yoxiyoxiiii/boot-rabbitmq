@@ -1,18 +1,22 @@
 package com.example.bootrabbitmq.direct;
 
+import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RestController
 public class DirectQueue {
 
     @Autowired
-    private AmqpTemplate amqpTemplate;
+    private RabbitTemplate amqpTemplate;
 
     @GetMapping("send")
     public String send() {
@@ -20,11 +24,10 @@ public class DirectQueue {
         amqpTemplate.convertAndSend("hello", "你好!");
         return "success";
     }
-
     @GetMapping("send/direct")
     public String sendirect() {
         //声明了直连exchange ，必须指定
-        amqpTemplate.convertAndSend("directExchange","hello-direct","hello-direct");
+        amqpTemplate.convertAndSend("directExchange","hello-directx","hello-direct");
         return "success";
     }
 
@@ -65,8 +68,11 @@ public class DirectQueue {
      */
     @RabbitListener(queues = "hello")
     @RabbitHandler
-    public void revc(String msg) {
+    public void revc(String msg, Channel channel, Message message) throws IOException {
         System.out.println(msg);
+        channel.basicQos(1);
+        //手动确认ack
+        channel.basicAck(message.getMessageProperties().getDeliveryTag(), true);
     }
 
 }
