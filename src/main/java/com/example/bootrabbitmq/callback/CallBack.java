@@ -33,11 +33,11 @@ public class CallBack implements RabbitTemplate.ConfirmCallback, RabbitTemplate.
     public void confirm(CorrelationData correlationData, boolean ack, String cause) {
 
         //消息成功投递到exchange
-        if (ack) {
-            System.out.println(ack);
-        } else {//失败
-            System.err.println(ack);
-        }
+//        if (ack) {
+//            System.out.println(ack);
+//        } else {//失败
+//            System.err.println(ack);
+//        }
     }
 
     /**
