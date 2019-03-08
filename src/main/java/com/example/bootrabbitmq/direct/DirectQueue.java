@@ -111,7 +111,7 @@ public class DirectQueue {
         //手动确认ack
 //        channel.basicAck(message.getMessageProperties().getDeliveryTag(), true);
 //        channel.basicReject(message.getMessageProperties().getDeliveryTag(),false);
-        int i = 1/0;
+//        int i = 1/0;
     }
 
 }
