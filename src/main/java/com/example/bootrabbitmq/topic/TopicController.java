@@ -58,7 +58,8 @@ public class TopicController {
 
     /**
      * 两个消费者同时消费同一个队列
-     * 默认 是 轮询分发
+     * 默认 是 轮询分发,
+     * 这里实现公平分发 ，这里的公平指的是对消息的消费，在没有消费完当前的消息时，不继续消费后面的消息
      * @param msg
      */
     @RabbitListener(queues = "topicQueue")

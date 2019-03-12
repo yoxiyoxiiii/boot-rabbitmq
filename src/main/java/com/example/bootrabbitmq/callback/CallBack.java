@@ -51,6 +51,6 @@ public class CallBack implements RabbitTemplate.ConfirmCallback, RabbitTemplate.
      */
     @Override
     public void returnedMessage(Message message, int replyCode, String replyText, String exchange, String routingKey) {
-        System.out.println(replyCode);
+        System.err.println(replyCode);
     }
 }
